@@ -1,0 +1,111 @@
+app: Ghostty
+subtitle: Default macOS keybindings
+paper: us-letter
+sections:
+  - name: Window Management
+    entries:
+      - keys: ["⌘", "N"]
+        action: New window
+      - keys: ["⌘", "⇧", "W"]
+        action: Close window
+      - keys: ["⌘", "⇧", "⌥", "W"]
+        action: Close all windows
+      - keys: ["⌘", "↵"]
+        alt_keys: ["⌘", "⌃", "F"]
+        action: Toggle fullscreen
+      - keys: ["⌘", "Q"]
+        action: Quit application
+
+  - name: Tab Management
+    entries:
+      - keys: ["⌘", "T"]
+        action: New tab
+      - keys: ["⌘", "W"]
+        action: Close tab
+      - keys: ["⌘", "⇧", "["]
+        action: Previous tab
+      - keys: ["⌘", "⇧", "]"]
+        action: Next tab
+      - keys: ["⌘", "1"]
+        action: "Go to tab 1\u20138"
+        range: ["⌘", "8"]
+      - keys: ["⌘", "9"]
+        action: Go to last tab
+
+  - name: Split Management
+    entries:
+      - keys: ["⌘", "D"]
+        action: "New split (right)"
+      - keys: ["⌘", "⇧", "D"]
+        action: "New split (down)"
+      - keys: ["⌘", "["]
+        action: Focus previous split
+      - keys: ["⌘", "]"]
+        action: Focus next split
+      - keys: ["⌘", "⌥", "↑"]
+        action: Focus split up
+      - keys: ["⌘", "⌥", "↓"]
+        action: Focus split down
+      - keys: ["⌘", "⌥", "←"]
+        action: Focus split left
+      - keys: ["⌘", "⌥", "→"]
+        action: Focus split right
+      - keys: ["⌘", "⇧", "↵"]
+        action: Toggle split zoom
+      - keys: ["⌘", "⌃", "↑"]
+        action: Resize split up
+      - keys: ["⌘", "⌃", "↓"]
+        action: Resize split down
+      - keys: ["⌘", "⌃", "←"]
+        action: Resize split left
+      - keys: ["⌘", "⌃", "→"]
+        action: Resize split right
+      - keys: ["⌘", "⌃", "="]
+        action: Equalize splits
+
+  - name: Copy & Paste
+    entries:
+      - keys: ["⌘", "C"]
+        action: Copy
+      - keys: ["⌘", "V"]
+        action: Paste
+
+  - name: Scrollback & Navigation
+    entries:
+      - keys: ["⌘", "Home"]
+        action: Scroll to top
+      - keys: ["⌘", "End"]
+        action: Scroll to bottom
+      - keys: ["⌘", "Page Up"]
+        action: Scroll page up
+      - keys: ["⌘", "Page Down"]
+        action: Scroll page down
+      - keys: ["⌘", "↑"]
+        action: Jump to previous prompt
+      - keys: ["⌘", "↓"]
+        action: Jump to next prompt
+      - keys: ["⌘", "K"]
+        action: Clear screen
+      - keys: ["⌘", "⇧", "J"]
+        action: "Write scrollback to file (paste)"
+      - keys: ["⌘", "⇧", "⌥", "J"]
+        action: "Write scrollback to file (open)"
+
+  - name: Font Size
+    entries:
+      - keys: ["⌘", "+"]
+        alt_keys: ["⌘", "="]
+        action: Increase font size
+      - keys: ["⌘", "-"]
+        action: Decrease font size
+      - keys: ["⌘", "0"]
+        action: Reset font size
+
+  - name: Configuration & Inspector
+    entries:
+      - keys: ["⌘", ","]
+        action: Open config
+      - keys: ["⌘", "⇧", ","]
+        action: Reload config
+      - keys: ["⌘", "⌥", "I"]
+        action: Toggle inspector
