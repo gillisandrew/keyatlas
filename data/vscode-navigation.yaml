@@ -60,5 +60,5 @@ sections:
         action: Open Source Control
       - keys: ["⌘", "↵"]
         action: Commit (in SCM input)
-      - keys: ["⌘K", "⌥⌘S"]
+      - keys: [["⌘", "K"], ["⌥", "⌘", "S"]]
         action: Stage selected ranges

@@ -39,7 +39,22 @@
 }
 
 #let render-keys(keys) = {
-  keys.map(k => box(baseline: 30%, kbd(k))).join(box(inset: (left: 3pt, right: 2pt), text(size: 9pt, fill: luma(140), "+")))
+  // Detect chord: if first element is an array, treat as multi-step
+  if type(keys.first()) == array {
+    // Chord: render each step, join with comma separator
+    keys.map(step =>
+      step.map(k => box(baseline: 30%, kbd(k))).join(
+        box(inset: (left: 3pt, right: 2pt), text(size: 9pt, fill: luma(140), "+"))
+      )
+    ).join(
+      box(inset: (left: 4pt, right: 3pt), text(size: 9pt, fill: luma(140), ","))
+    )
+  } else {
+    // Simple shortcut: join with +
+    keys.map(k => box(baseline: 30%, kbd(k))).join(
+      box(inset: (left: 3pt, right: 2pt), text(size: 9pt, fill: luma(140), "+"))
+    )
+  }
 }
 
 #let render-entry(entry, bg) = {
