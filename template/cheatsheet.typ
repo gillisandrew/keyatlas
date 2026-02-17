@@ -20,11 +20,10 @@
   set text(font: "Helvetica Neue", size: 8.5pt)
   set par(leading: 0.45em)
 
-  // Title block spanning all columns
-  place(
-    top + center,
-    float: true,
-    scope: "parent",
+  // Title block in first column
+  block(
+    width: 100%,
+    inset: (bottom: 4pt),
     {
       text(size: 16pt, weight: "bold", fill: accent-color, title)
       if subtitle != none {
@@ -33,7 +32,6 @@
       }
       v(2pt)
       line(length: 100%, stroke: 0.5pt + accent-color)
-      v(2pt)
     },
   )
 
@@ -41,14 +39,42 @@
 }
 
 #let render-keys(keys) = {
-  keys.map(k => box(baseline: 30%, kbd(k))).join(box(inset: (x: 1pt), text(fill: luma(140), "+")))
+  keys.map(k => box(baseline: 30%, kbd(k))).join(box(inset: (left: 3pt, right: 2pt), text(size: 9pt, fill: luma(140), "+")))
+}
+
+#let render-entry(entry, bg) = {
+  block(
+    width: 100%,
+    fill: bg,
+    inset: (x: 5pt, y: 2pt),
+    radius: 1pt,
+    grid(
+      columns: (1fr, auto),
+      align: (left + horizon, right + horizon),
+      gutter: 4pt,
+      text(size: 10pt, entry.action),
+      {
+        render-keys(entry.keys)
+        if "alt_keys" in entry {
+          box(inset: (left: 3pt, right: 2pt), text(size: 9pt, fill: luma(140), "/"))
+          render-keys(entry.alt_keys)
+        }
+        if "range" in entry {
+          box(inset: (left: 3pt, right: 2pt), text(size: 9pt, fill: luma(140), "–"))
+          render-keys(entry.range)
+        }
+      },
+    ),
+  )
 }
 
 #let keybinding-section(name, entries, accent-color: rgb("#4a90d9")) = {
+  // Keep header and first two entries together so the heading is never
+  // stranded at the bottom of a column.
+  let peek = calc.min(entries.len(), 2)
   block(
     width: 100%,
-    inset: (bottom: 5pt),
-    breakable: true,
+    breakable: false,
     {
       // Section header
       block(
@@ -56,38 +82,21 @@
         fill: accent-color.lighten(85%),
         inset: (x: 5pt, y: 3pt),
         radius: 2pt,
-        text(weight: "bold", size: 8.5pt, fill: accent-color.darken(20%), name),
+        text(weight: "bold", size: 10pt, fill: accent-color.darken(20%), name),
       )
       v(2pt)
-      // Entries
-      for (i, entry) in entries.enumerate() {
+      for i in range(peek) {
         let bg = if calc.rem(i, 2) == 0 { luma(248) } else { white }
-        block(
-          width: 100%,
-          fill: bg,
-          inset: (x: 5pt, y: 2pt),
-          radius: 1pt,
-          grid(
-            columns: (1fr, auto),
-            align: (left + horizon, right + horizon),
-            gutter: 4pt,
-            text(size: 8pt, entry.action),
-            {
-              render-keys(entry.keys)
-              if "alt_keys" in entry {
-                text(size: 7pt, fill: luma(140), " / ")
-                render-keys(entry.alt_keys)
-              }
-              if "range" in entry {
-                text(size: 7pt, fill: luma(140), " – ")
-                render-keys(entry.range)
-              }
-            },
-          ),
-        )
+        render-entry(entries.at(i), bg)
       }
     },
   )
+  // Remaining entries can break freely across columns
+  for i in range(peek, entries.len()) {
+    let bg = if calc.rem(i, 2) == 0 { luma(248) } else { white }
+    render-entry(entries.at(i), bg)
+  }
+  v(5pt)
 }
 
 #let keybinding-sections(data, accent-color: rgb("#4a90d9")) = {

@@ -1,0 +1,107 @@
+app: VS Code
+subtitle: General operations (macOS)
+sections:
+  - name: General
+    entries:
+      - keys: ["⌘", "P"]
+        action: Quick Open file
+      - keys: ["⇧", "⌘", "P"]
+        alt_keys: ["F1"]
+        action: Command Palette
+      - keys: ["⌘", ","]
+        action: Open Settings
+      - keys: ["⌘K", "⌘S"]
+        action: Open Keyboard Shortcuts
+      - keys: ["⌃", "`"]
+        action: Toggle Terminal
+      - keys: ["⌘", "J"]
+        action: Toggle Panel
+      - keys: ["⌘", "B"]
+        action: Toggle Sidebar
+      - keys: ["⇧", "⌘", "E"]
+        action: Explorer
+      - keys: ["⇧", "⌘", "F"]
+        action: Search
+      - keys: ["⌃", "⇧", "G"]
+        action: Source Control
+      - keys: ["⇧", "⌘", "D"]
+        action: Debug
+      - keys: ["⇧", "⌘", "X"]
+        action: Extensions
+      - keys: ["⇧", "⌘", "M"]
+        action: Problems
+      - keys: ["⇧", "⌘", "U"]
+        action: Output
+      - keys: ["⌘K", "Z"]
+        action: Toggle Zen Mode
+
+  - name: File Management
+    entries:
+      - keys: ["⌘", "N"]
+        action: New File
+      - keys: ["⌘", "O"]
+        action: Open File / Folder
+      - keys: ["⌘", "S"]
+        action: Save
+      - keys: ["⇧", "⌘", "S"]
+        action: Save As
+      - keys: ["⌥", "⌘", "S"]
+        action: Save All
+      - keys: ["⌘", "W"]
+        action: Close Editor
+      - keys: ["⌘K", "⌘W"]
+        action: Close All Editors
+      - keys: ["⇧", "⌘", "T"]
+        action: Reopen Closed Editor
+      - keys: ["⌃", "Tab"]
+        action: Quick Switch Editor
+      - keys: ["⌘K", "↵"]
+        action: Keep Editor Open
+
+  - name: Editor Management
+    entries:
+      - keys: ["⌘", "\\"]
+        action: Split Editor
+      - keys: ["⌘", "1"]
+        action: "Focus Editor Group 1\u20133"
+        range: ["3"]
+      - keys: ["⌘K", "⌘←"]
+        action: Focus Left Group
+      - keys: ["⌘K", "⌘→"]
+        action: Focus Right Group
+      - keys: ["⌃", "⌘", "→"]
+        action: Move Editor to Next Group
+      - keys: ["⌃", "⌘", "←"]
+        action: Move Editor to Previous Group
+
+  - name: Display
+    entries:
+      - keys: ["⌃", "⌘", "F"]
+        action: Toggle Full Screen
+      - keys: ["⌘", "="]
+        action: Zoom In
+      - keys: ["⌘", "-"]
+        action: Zoom Out
+      - keys: ["⌘", "0"]
+        action: Reset Zoom
+
+  - name: Search & Replace
+    entries:
+      - keys: ["⌘", "F"]
+        action: Find
+      - keys: ["⌥", "⌘", "F"]
+        action: Find and Replace
+      - keys: ["⌘", "G"]
+        action: Find Next
+      - keys: ["⇧", "⌘", "G"]
+        action: Find Previous
+      - keys: ["⌥", "⌘", "C"]
+        action: Toggle Case Sensitive
+      - keys: ["⌥", "⌘", "R"]
+        action: Toggle Regex
+      - keys: ["⌥", "⌘", "W"]
+        action: Toggle Whole Word
+      - keys: ["⇧", "⌘", "F"]
+        action: Find in Files
+      - keys: ["⇧", "⌘", "H"]
+        action: Replace in Files

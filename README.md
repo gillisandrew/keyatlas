@@ -4,25 +4,39 @@ Keyboard shortcut cheat sheets rendered as printable PDFs using [Typst](https://
 
 ## Prerequisites
 
+- Python 3.13+
 - [Typst CLI](https://github.com/typst/typst) — install via `brew install typst`, `cargo install typst-cli`, or your package manager
+- [uv](https://docs.astral.sh/uv/) (recommended) for running the CLI
 
 ## Usage
 
-Compile a cheat sheet to PDF:
+Compile all cheat sheets in `data/` at once:
 
 ```sh
-typst compile ghostty.typ ghostty.pdf
+uv run keyatlas
 ```
 
-For live preview while editing:
+Compile a single file:
 
 ```sh
-typst watch ghostty.typ ghostty.pdf
+uv run keyatlas data/ghostty.yaml
+```
+
+Compile specific files with shell globs:
+
+```sh
+uv run keyatlas data/vscode-*.yaml
+```
+
+Custom output path (single file only):
+
+```sh
+uv run keyatlas data/ghostty.yaml -o ~/Desktop/ghostty.pdf
 ```
 
 ## Adding a new app
 
-1. Create `data/<app>.yaml` with keybinding data:
+Create `data/<app>.yaml` with keybinding data:
 
 ```yaml
 app: App Name
@@ -34,27 +48,39 @@ sections:
         action: Do something
 ```
 
-2. Create `<app>.typ` entry point:
+Then run `uv run keyatlas data/<app>.yaml` to generate the PDF.
 
-```typst
-#import "template/cheatsheet.typ": cheatsheet, keybinding-sections
+### YAML schema
 
-#show: cheatsheet.with(
-  title: "App Name",
-  subtitle: "Description",
-)
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `app` | string | yes | Application name (shown in title) |
+| `subtitle` | string | no | Subtitle below the title |
+| `paper` | string | no | Paper size (default: `us-letter`) |
+| `columns` | int | no | Number of columns (default: `3`) |
+| `sections` | list | yes | List of sections |
+| `sections[].name` | string | yes | Section heading |
+| `sections[].entries` | list | yes | List of keybinding entries |
+| `entries[].keys` | list[string] | yes | Key sequence, e.g. `["⌘", "N"]` |
+| `entries[].alt_keys` | list[string] | no | Alternate key sequence |
+| `entries[].action` | string | yes | Action description |
+| `entries[].range` | list[string] | no | End of a numeric range, e.g. `["8"]` |
 
-#keybinding-sections(yaml("data/<app>.yaml"))
-```
-
-3. Compile: `typst compile <app>.typ <app>.pdf`
+Chord shortcuts (like `Cmd+K Cmd+S`) are written as combined strings: `["⌘K", "⌘S"]`.
 
 ## Project structure
 
 ```
 keyatlas/
-├── data/           # Keybinding data (YAML, one file per app)
-├── template/       # Reusable Typst template
-├── ghostty.typ     # Entry point for Ghostty cheat sheet
-└── ghostty.md      # Original Markdown reference
+├── data/                # Keybinding data (YAML, one file per app)
+│   ├── ghostty.yaml
+│   ├── vscode-general.yaml
+│   ├── vscode-editing.yaml
+│   └── vscode-navigation.yaml
+├── src/keyatlas/        # Python CLI package
+│   ├── __init__.py
+│   └── cli.py           # Entry point: compiles YAML → PDF via Typst
+├── template/
+│   └── cheatsheet.typ   # Reusable Typst template
+└── pyproject.toml
 ```

@@ -1,0 +1,101 @@
+app: VS Code
+subtitle: Code editing (macOS)
+sections:
+  - name: Basic Editing
+    entries:
+      - keys: ["⌘", "X"]
+        action: Cut line (empty selection)
+      - keys: ["⌘", "C"]
+        action: Copy line (empty selection)
+      - keys: ["⌥", "↑"]
+        action: Move line up
+      - keys: ["⌥", "↓"]
+        action: Move line down
+      - keys: ["⇧", "⌥", "↑"]
+        action: Copy line up
+      - keys: ["⇧", "⌥", "↓"]
+        action: Copy line down
+      - keys: ["⇧", "⌘", "K"]
+        action: Delete line
+      - keys: ["⌘", "↵"]
+        action: Insert line below
+      - keys: ["⇧", "⌘", "↵"]
+        action: Insert line above
+      - keys: ["⌘", "⇧", "\\"]
+        action: Jump to matching bracket
+      - keys: ["⌘", "]"]
+        action: Indent line
+      - keys: ["⌘", "["]
+        action: Outdent line
+      - keys: ["⌘", "/"]
+        action: Toggle line comment
+      - keys: ["⇧", "⌥", "A"]
+        action: Toggle block comment
+      - keys: ["⌥", "Z"]
+        action: Toggle word wrap
+      - keys: ["⌘", "L"]
+        action: Select current line
+      - keys: ["⇧", "⌘", "L"]
+        action: Select all occurrences
+      - keys: ["⌘", "F2"]
+        action: Change all occurrences
+      - keys: ["⇧", "⌥", "F"]
+        action: Format document
+      - keys: ["⌘K", "⌘F"]
+        action: Format selection
+      - keys: ["⌘", "Z"]
+        action: Undo
+      - keys: ["⇧", "⌘", "Z"]
+        action: Redo
+      - keys: ["⌘", "U"]
+        action: Cursor undo
+
+  - name: Multi-Cursor
+    entries:
+      - keys: ["⌥", "⌘", "↑"]
+        action: Insert cursor above
+      - keys: ["⌥", "⌘", "↓"]
+        action: Insert cursor below
+      - keys: ["⌘", "D"]
+        action: Add next find match
+      - keys: ["⌘K", "⌘D"]
+        action: Skip match, select next
+      - keys: ["⇧", "⌥", "I"]
+        action: Insert cursor at end of each line
+
+  - name: Rich Languages
+    entries:
+      - keys: ["⌃", "Space"]
+        action: Trigger suggestion
+      - keys: ["⇧", "⌘", "Space"]
+        action: Trigger parameter hints
+      - keys: ["F12"]
+        action: Go to Definition
+      - keys: ["⌥", "F12"]
+        action: Peek Definition
+      - keys: ["⌘K", "F12"]
+        action: Open Definition to side
+      - keys: ["⇧", "F12"]
+        action: Go to References
+      - keys: ["F2"]
+        action: Rename symbol
+      - keys: ["⌘", "."]
+        action: Quick Fix
+      - keys: ["⌃", "⇧", "R"]
+        action: Refactor
+      - keys: ["⇧", "⌥", "O"]
+        action: Organize Imports
+
+  - name: Code Folding
+    entries:
+      - keys: ["⌥", "⌘", "["]
+        action: Fold region
+      - keys: ["⌥", "⌘", "]"]
+        action: Unfold region
+      - keys: ["⌘K", "⌘0"]
+        action: Fold All
+      - keys: ["⌘K", "⌘J"]
+        action: Unfold All
+      - keys: ["⌘K", "⌘1"]
+        action: "Fold Level 1\u20137"
+        range: ["7"]

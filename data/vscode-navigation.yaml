@@ -1,0 +1,64 @@
+app: VS Code
+subtitle: Navigation & integrated features (macOS)
+sections:
+  - name: Navigation
+    entries:
+      - keys: ["⌃", "G"]
+        action: Go to Line
+      - keys: ["⌘", "P"]
+        action: Go to File
+      - keys: ["⇧", "⌘", "O"]
+        action: Go to Symbol in Editor
+      - keys: ["⌘", "T"]
+        action: Go to Symbol in Workspace
+      - keys: ["F8"]
+        action: Next Error / Warning
+      - keys: ["⇧", "F8"]
+        action: Previous Error / Warning
+      - keys: ["⌃", "-"]
+        action: Navigate Back
+      - keys: ["⌃", "⇧", "-"]
+        action: Navigate Forward
+      - keys: ["⌘", "⇧", "\\"]
+        action: Jump to Matching Bracket
+
+  - name: Debug
+    entries:
+      - keys: ["F5"]
+        action: Start / Continue
+      - keys: ["⇧", "F5"]
+        action: Stop
+      - keys: ["⇧", "⌘", "F5"]
+        action: Restart
+      - keys: ["F10"]
+        action: Step Over
+      - keys: ["F11"]
+        action: Step Into
+      - keys: ["⇧", "F11"]
+        action: Step Out
+      - keys: ["F9"]
+        action: Toggle Breakpoint
+
+  - name: Integrated Terminal
+    entries:
+      - keys: ["⌃", "`"]
+        action: Toggle Terminal
+      - keys: ["⌃", "⇧", "`"]
+        action: New Terminal
+      - keys: ["⌘", "K"]
+        action: Clear Terminal
+      - keys: ["⌘", "\\"]
+        action: Split Terminal
+      - keys: ["⇧", "⌘", "["]
+        action: Focus Previous Terminal
+      - keys: ["⇧", "⌘", "]"]
+        action: Focus Next Terminal
+
+  - name: Source Control
+    entries:
+      - keys: ["⌃", "⇧", "G"]
+        action: Open Source Control
+      - keys: ["⌘", "↵"]
+        action: Commit (in SCM input)
+      - keys: ["⌘K", "⌥⌘S"]
+        action: Stage selected ranges

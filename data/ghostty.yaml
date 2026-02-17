@@ -1,6 +1,5 @@
 app: Ghostty
 subtitle: Default macOS keybindings
-paper: us-letter
 sections:
   - name: Window Management
     entries:
@@ -28,7 +27,7 @@ sections:
         action: Next tab
       - keys: ["⌘", "1"]
         action: "Go to tab 1\u20138"
-        range: ["⌘", "8"]
+        range: ["8"]
       - keys: ["⌘", "9"]
         action: Go to last tab
 
@@ -63,22 +62,15 @@ sections:
       - keys: ["⌘", "⌃", "="]
         action: Equalize splits
 
-  - name: Copy & Paste
-    entries:
-      - keys: ["⌘", "C"]
-        action: Copy
-      - keys: ["⌘", "V"]
-        action: Paste
-
   - name: Scrollback & Navigation
     entries:
-      - keys: ["⌘", "Home"]
+      - keys: ["⌘", "Fn", "←"]
         action: Scroll to top
-      - keys: ["⌘", "End"]
+      - keys: ["⌘", "Fn", "→"]
         action: Scroll to bottom
-      - keys: ["⌘", "Page Up"]
+      - keys: ["⌘", "Fn", "↑"]
         action: Scroll page up
-      - keys: ["⌘", "Page Down"]
+      - keys: ["⌘", "Fn", "↓"]
         action: Scroll page down
       - keys: ["⌘", "↑"]
         action: Jump to previous prompt
