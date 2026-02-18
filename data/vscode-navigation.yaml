@@ -1,3 +1,4 @@
+# yaml-language-server: $schema=../schema/keyatlas.schema.json
 app: VS Code
 subtitle: Navigation & integrated features (macOS)
 sections:
@@ -60,5 +61,5 @@ sections:
         action: Open Source Control
       - keys: ["⌘", "↵"]
         action: Commit (in SCM input)
-      - keys: ["⌘K", "⌥⌘S"]
+      - keys: [["⌘", "K"], ["⌥", "⌘", "S"]]
         action: Stage selected ranges

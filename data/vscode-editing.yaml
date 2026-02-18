@@ -1,3 +1,4 @@
+# yaml-language-server: $schema=../schema/keyatlas.schema.json
 app: VS Code
 subtitle: Code editing (macOS)
 sections:
@@ -41,7 +42,7 @@ sections:
         action: Change all occurrences
       - keys: ["⇧", "⌥", "F"]
         action: Format document
-      - keys: ["⌘K", "⌘F"]
+      - keys: [["⌘", "K"], ["⌘", "F"]]
         action: Format selection
       - keys: ["⌘", "Z"]
         action: Undo
@@ -58,7 +59,7 @@ sections:
         action: Insert cursor below
       - keys: ["⌘", "D"]
         action: Add next find match
-      - keys: ["⌘K", "⌘D"]
+      - keys: [["⌘", "K"], ["⌘", "D"]]
         action: Skip match, select next
       - keys: ["⇧", "⌥", "I"]
         action: Insert cursor at end of each line
@@ -73,7 +74,7 @@ sections:
         action: Go to Definition
       - keys: ["⌥", "F12"]
         action: Peek Definition
-      - keys: ["⌘K", "F12"]
+      - keys: [["⌘", "K"], ["F12"]]
         action: Open Definition to side
       - keys: ["⇧", "F12"]
         action: Go to References
@@ -92,10 +93,10 @@ sections:
         action: Fold region
       - keys: ["⌥", "⌘", "]"]
         action: Unfold region
-      - keys: ["⌘K", "⌘0"]
+      - keys: [["⌘", "K"], ["⌘", "0"]]
         action: Fold All
-      - keys: ["⌘K", "⌘J"]
+      - keys: [["⌘", "K"], ["⌘", "J"]]
         action: Unfold All
-      - keys: ["⌘K", "⌘1"]
+      - keys: [["⌘", "K"], ["⌘", "1"]]
         action: "Fold Level 1\u20137"
         range: ["7"]
