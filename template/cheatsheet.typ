@@ -109,7 +109,7 @@
     width: 100%,
     breakable: false,
     {
-      // Section header — left accent stripe, uppercase with letter-spacing
+      // Section header — left accent stripe, uppercase with tracking
       block(
         width: 100%,
         stroke: (left: 2.5pt + accent-color),
@@ -118,6 +118,7 @@
           weight: "bold",
           size: 1.06em,
           fill: accent-color.darken(10%),
+          tracking: 0.05em,
           upper(name),
         ),
       )

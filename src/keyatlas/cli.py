@@ -82,13 +82,20 @@ DEFAULTS: dict[str, object] = {
     "columns": 3,
 }
 
+# YAML field names differ from internal config keys for two settings.
+_YAML_KEY: dict[str, str] = {
+    "accent-color": "color",
+    "font-scale": "font_scale",
+}
+
 
 def resolve_config(yaml_data: dict, cli_args: argparse.Namespace) -> dict:
     """Merge defaults < YAML values < CLI flags into a config dict."""
     config: dict[str, object] = {}
     for key, default in DEFAULTS.items():
-        # YAML layer
-        yaml_val = yaml_data.get(key)
+        # YAML uses different field names for two settings
+        yaml_key = _YAML_KEY.get(key, key)
+        yaml_val = yaml_data.get(yaml_key)
         config[key] = yaml_val if yaml_val is not None else default
 
     # CLI overrides (only when explicitly provided)
@@ -103,7 +110,6 @@ def resolve_config(yaml_data: dict, cli_args: argparse.Namespace) -> dict:
     if cli_args.columns is not None:
         config["columns"] = cli_args.columns
 
-    # Extra values not passed to Typst yet but stored in config
     config["version"] = _get_version()
 
     return config
@@ -165,20 +171,17 @@ def build_typ_content(yaml_rel_path: str, config: dict) -> str:
 # ── Compilation ─────────────────────────────────────────────────────────
 
 def compile_one(
-    yaml_path: Path,
+    yaml_data: dict,
+    yaml_name: str,
     output_path: Path,
     config: dict,
     platform: str,
 ) -> bool:
-    """Compile a single YAML file to PDF. Returns True on success."""
-    # Read and optionally transform YAML data
-    with open(yaml_path, "r", encoding="utf-8") as fh:
-        yaml_data = yaml.safe_load(fh)
-
+    """Compile a single YAML document to PDF. Returns True on success."""
     if platform == "windows":
         yaml_data = _apply_windows_keymap(yaml_data)
 
-    # Write transformed YAML to a temp file inside the project root
+    # Write (possibly transformed) YAML to a temp file inside the project root
     with tempfile.NamedTemporaryFile(
         mode="w", suffix=".yaml", delete=False, dir=PROJECT_ROOT
     ) as yf:
@@ -186,32 +189,34 @@ def compile_one(
         tmp_yaml = Path(yf.name)
 
     try:
-        rel_yaml = tmp_yaml.relative_to(PROJECT_ROOT).as_posix()
-    except ValueError:
-        rel_yaml = os.path.relpath(tmp_yaml, PROJECT_ROOT)
+        try:
+            rel_yaml = tmp_yaml.relative_to(PROJECT_ROOT).as_posix()
+        except ValueError:
+            rel_yaml = os.path.relpath(tmp_yaml, PROJECT_ROOT)
 
-    typ_content = build_typ_content(rel_yaml, config)
+        typ_content = build_typ_content(rel_yaml, config)
 
-    with tempfile.NamedTemporaryFile(
-        mode="w", suffix=".typ", delete=False, dir=PROJECT_ROOT
-    ) as f:
-        f.write(typ_content)
-        tmp_typ = Path(f.name)
+        with tempfile.NamedTemporaryFile(
+            mode="w", suffix=".typ", delete=False, dir=PROJECT_ROOT
+        ) as f:
+            f.write(typ_content)
+            tmp_typ = Path(f.name)
 
-    try:
-        result = subprocess.run(
-            ["typst", "compile", str(tmp_typ), str(output_path)],
-            capture_output=True,
-            text=True,
-        )
-        if result.returncode != 0:
-            print(f"Error compiling {yaml_path.name}:", file=sys.stderr)
-            print(result.stderr, file=sys.stderr)
-            return False
-        print(f"Compiled {output_path}")
-        return True
+        try:
+            result = subprocess.run(
+                ["typst", "compile", str(tmp_typ), str(output_path)],
+                capture_output=True,
+                text=True,
+            )
+            if result.returncode != 0:
+                print(f"Error compiling {yaml_name}:", file=sys.stderr)
+                print(result.stderr, file=sys.stderr)
+                return False
+            print(f"Compiled {output_path}")
+            return True
+        finally:
+            tmp_typ.unlink(missing_ok=True)
     finally:
-        tmp_typ.unlink(missing_ok=True)
         tmp_yaml.unlink(missing_ok=True)
 
 
@@ -321,6 +326,14 @@ def main() -> None:
         )
         sys.exit(1)
 
+    if args.output and args.platform == "both":
+        print(
+            "Error: -o/--output cannot be used with --platform both "
+            "(two PDFs would share the same output path)",
+            file=sys.stderr,
+        )
+        sys.exit(1)
+
     # ── Output directory setup ───────────────────────────────────────
     if args.output_dir:
         args.output_dir.mkdir(parents=True, exist_ok=True)
@@ -356,7 +369,7 @@ def main() -> None:
                     filename = f"{yaml_path.stem}.pdf"
                 output_path = Path.cwd() / filename
 
-            if not compile_one(yaml_path, output_path, config, platform):
+            if not compile_one(yaml_data, yaml_path.name, output_path, config, platform):
                 failures += 1
 
     if failures:
