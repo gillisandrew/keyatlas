@@ -138,6 +138,9 @@ def build_typ_content(yaml_rel_path: str, config: dict) -> str:
     paper = _typ_str(config["paper"])
     columns = config["columns"]
     accent = _typ_color(config["accent-color"])
+    font_scale = config["font-scale"]
+    orientation = _typ_str(config["orientation"])
+    version = _typ_str(config["version"])
 
     return f"""\
 #import "template/cheatsheet.typ": cheatsheet, keybinding-sections
@@ -150,6 +153,9 @@ def build_typ_content(yaml_rel_path: str, config: dict) -> str:
   paper: {paper},
   columns: {columns},
   accent-color: {accent},
+  font-scale: {font_scale},
+  orientation: {orientation},
+  version: {version},
 )
 
 #keybinding-sections(data, accent-color: {accent})
