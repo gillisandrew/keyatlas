@@ -5,13 +5,10 @@ from __future__ import annotations
 import argparse
 import copy
 import importlib.metadata
-import os
-import shutil
-import subprocess
 import sys
-import tempfile
 from pathlib import Path
 
+import typst
 import yaml
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
@@ -136,11 +133,8 @@ def _typ_color(hex_color: str) -> str:
     return f'rgb("{hex_color}")'
 
 
-def build_typ_content(yaml_rel_path: str, config: dict) -> str:
+def build_typ_content(config: dict) -> str:
     """Build the Typst entrypoint source that imports the template."""
-    title_expr = f'data.at("app", default: "Cheat Sheet")'
-    subtitle_expr = 'data.at("subtitle", default: none)'
-
     paper = _typ_str(config["paper"])
     columns = config["columns"]
     accent = _typ_color(config["accent-color"])
@@ -151,11 +145,11 @@ def build_typ_content(yaml_rel_path: str, config: dict) -> str:
     return f"""\
 #import "template/cheatsheet.typ": cheatsheet, keybinding-sections
 
-#let data = yaml("{yaml_rel_path}")
+#let data = yaml("data.yaml")
 
 #show: cheatsheet.with(
-  title: {title_expr},
-  subtitle: {subtitle_expr},
+  title: data.at("app", default: "Cheat Sheet"),
+  subtitle: data.at("subtitle", default: none),
   paper: {paper},
   columns: {columns},
   accent-color: {accent},
@@ -181,43 +175,20 @@ def compile_one(
     if platform == "windows":
         yaml_data = _apply_windows_keymap(yaml_data)
 
-    # Write (possibly transformed) YAML to a temp file inside the project root
-    with tempfile.NamedTemporaryFile(
-        mode="w", suffix=".yaml", delete=False, dir=PROJECT_ROOT
-    ) as yf:
-        yaml.dump(yaml_data, yf, allow_unicode=True)
-        tmp_yaml = Path(yf.name)
+    files = {
+        "main.typ": build_typ_content(config).encode(),
+        "template/cheatsheet.typ": (PROJECT_ROOT / "template" / "cheatsheet.typ").read_bytes(),
+        "data.yaml": yaml.dump(yaml_data, allow_unicode=True).encode(),
+    }
 
     try:
-        try:
-            rel_yaml = tmp_yaml.relative_to(PROJECT_ROOT).as_posix()
-        except ValueError:
-            rel_yaml = os.path.relpath(tmp_yaml, PROJECT_ROOT)
-
-        typ_content = build_typ_content(rel_yaml, config)
-
-        with tempfile.NamedTemporaryFile(
-            mode="w", suffix=".typ", delete=False, dir=PROJECT_ROOT
-        ) as f:
-            f.write(typ_content)
-            tmp_typ = Path(f.name)
-
-        try:
-            result = subprocess.run(
-                ["typst", "compile", str(tmp_typ), str(output_path)],
-                capture_output=True,
-                text=True,
-            )
-            if result.returncode != 0:
-                print(f"Error compiling {yaml_name}:", file=sys.stderr)
-                print(result.stderr, file=sys.stderr)
-                return False
-            print(f"Compiled {output_path}")
-            return True
-        finally:
-            tmp_typ.unlink(missing_ok=True)
-    finally:
-        tmp_yaml.unlink(missing_ok=True)
+        typst.compile(files, output=str(output_path))
+        print(f"Compiled {output_path}")
+        return True
+    except Exception as exc:
+        print(f"Error compiling {yaml_name}:", file=sys.stderr)
+        print(exc, file=sys.stderr)
+        return False
 
 
 # ── Main ────────────────────────────────────────────────────────────────
@@ -295,13 +266,6 @@ def main() -> None:
     )
 
     args = parser.parse_args()
-
-    if shutil.which("typst") is None:
-        print(
-            "Error: typst CLI not found. Install it from https://github.com/typst/typst",
-            file=sys.stderr,
-        )
-        sys.exit(1)
 
     # ── Resolve input files ──────────────────────────────────────────
     yaml_files: list[Path] = []
