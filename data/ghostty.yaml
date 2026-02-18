@@ -1,6 +1,7 @@
 # yaml-language-server: $schema=../schema/keyatlas.schema.json
 app: Ghostty
 subtitle: Default macOS keybindings
+color: "#3551F3"
 sections:
   - name: Window Management
     entries:
