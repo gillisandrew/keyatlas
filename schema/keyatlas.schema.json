@@ -1,0 +1,132 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/gillisandrew/keyatlas/schema/keyatlas.schema.json",
+  "title": "KeyAtlas YAML Input Format",
+  "description": "Schema for KeyAtlas keyboard shortcut cheat sheet data files.",
+  "type": "object",
+  "required": ["app", "sections"],
+  "additionalProperties": false,
+  "properties": {
+    "app": {
+      "type": "string",
+      "description": "Application name displayed as the cheat sheet title."
+    },
+    "subtitle": {
+      "type": "string",
+      "description": "Optional subtitle displayed below the title."
+    },
+    "paper": {
+      "type": "string",
+      "description": "Paper size using any Typst paper size string.",
+      "default": "us-letter"
+    },
+    "columns": {
+      "type": "integer",
+      "description": "Number of layout columns.",
+      "minimum": 1,
+      "maximum": 6,
+      "default": 3
+    },
+    "color": {
+      "type": "string",
+      "description": "Accent color as a CSS hex color string.",
+      "pattern": "^#[0-9a-fA-F]{6}$",
+      "default": "#4a90d9"
+    },
+    "font_scale": {
+      "type": "number",
+      "description": "Font size multiplier relative to the template default.",
+      "minimum": 0.5,
+      "maximum": 2.0,
+      "default": 1.0
+    },
+    "orientation": {
+      "type": "string",
+      "description": "Page orientation.",
+      "enum": ["landscape", "portrait"],
+      "default": "landscape"
+    },
+    "sections": {
+      "type": "array",
+      "description": "List of keybinding sections.",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/section"
+      }
+    }
+  },
+  "$defs": {
+    "keyCombo": {
+      "description": "A flat array of key strings representing a single key combination.",
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1
+    },
+    "keysField": {
+      "description": "Either a single key combination (flat array of strings) or a chord sequence (array of key combinations, each being an array of strings).",
+      "oneOf": [
+        {
+          "$ref": "#/$defs/keyCombo"
+        },
+        {
+          "type": "array",
+          "description": "A chord sequence: an ordered list of key combinations pressed in sequence.",
+          "minItems": 2,
+          "items": {
+            "$ref": "#/$defs/keyCombo"
+          }
+        }
+      ]
+    },
+    "section": {
+      "description": "A named group of keybinding entries.",
+      "type": "object",
+      "required": ["name", "entries"],
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Section heading displayed in the cheat sheet."
+        },
+        "entries": {
+          "type": "array",
+          "description": "List of keybinding entries in this section.",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/entry"
+          }
+        }
+      }
+    },
+    "entry": {
+      "description": "A single keybinding entry with keys and an action description.",
+      "type": "object",
+      "required": ["keys", "action"],
+      "additionalProperties": false,
+      "properties": {
+        "keys": {
+          "$ref": "#/$defs/keysField",
+          "description": "Primary key combination or chord sequence (macOS by default)."
+        },
+        "win_keys": {
+          "$ref": "#/$defs/keysField",
+          "description": "Windows-specific key combination or chord sequence. Overrides auto-mapping from keys when --platform windows is used."
+        },
+        "alt_keys": {
+          "$ref": "#/$defs/keyCombo",
+          "description": "Alternate key combination shown alongside the primary keys."
+        },
+        "range": {
+          "$ref": "#/$defs/keyCombo",
+          "description": "The end of a numeric range, used to display e.g. '1–8' when keys starts at 1."
+        },
+        "action": {
+          "type": "string",
+          "description": "Human-readable description of the action performed by the key combination."
+        }
+      }
+    }
+  }
+}
