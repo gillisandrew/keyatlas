@@ -11,6 +11,10 @@
       "type": "string",
       "description": "Application name displayed as the cheat sheet title."
     },
+    "shortname": {
+      "type": "string",
+      "description": "Short display name used in sidebar navigation when multiple cheatsheets share the same app."
+    },
     "subtitle": {
       "type": "string",
       "description": "Optional subtitle displayed below the title."

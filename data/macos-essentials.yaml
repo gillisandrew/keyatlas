@@ -1,5 +1,6 @@
 # yaml-language-server: $schema=../schema/keyatlas.schema.json
 app: macOS
+shortname: Essentials
 subtitle: Essential shortcuts for everyday use
 columns: 3
 sections:

@@ -1,5 +1,6 @@
 # yaml-language-server: $schema=../schema/keyatlas.schema.json
 app: macOS
+shortname: Text Editing
 subtitle: Text editing, cursor movement & selection
 columns: 3
 sections:

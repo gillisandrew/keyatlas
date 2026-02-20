@@ -1,5 +1,6 @@
 # yaml-language-server: $schema=../schema/keyatlas.schema.json
 app: VS Code
+shortname: Navigation
 subtitle: Navigation & integrated features (macOS)
 sections:
   - name: Navigation

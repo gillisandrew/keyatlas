@@ -1,5 +1,6 @@
 # yaml-language-server: $schema=../schema/keyatlas.schema.json
 app: VS Code
+shortname: Editing
 subtitle: Code editing (macOS)
 sections:
   - name: Basic Editing

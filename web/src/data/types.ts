@@ -17,6 +17,7 @@ export interface Section {
 
 export interface CheatsheetData {
   app: string
+  shortname?: string
   subtitle?: string
   paper?: string
   columns?: number
