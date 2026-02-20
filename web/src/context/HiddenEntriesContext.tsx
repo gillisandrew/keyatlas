@@ -33,6 +33,8 @@ function writeStorage(data: HiddenMap) {
 interface HiddenEntriesContextValue {
   isHidden: (slug: string, entryId: string) => boolean
   toggle: (slug: string, entryId: string) => void
+  toggleSection: (slug: string, sectionIndex: number, entryCount: number) => void
+  isSectionAllHidden: (slug: string, sectionIndex: number, entryCount: number) => boolean
   resetSlug: (slug: string) => void
   hiddenCount: (slug: string) => number
 }
@@ -69,6 +71,40 @@ export function HiddenEntriesProvider({ children }: { children: React.ReactNode 
     writeStorage(current)
   }, [])
 
+  const isSectionAllHidden = useCallback(
+    (slug: string, sectionIndex: number, entryCount: number) => {
+      const list = data[slug] ?? []
+      for (let i = 0; i < entryCount; i++) {
+        if (!list.includes(`${sectionIndex}-${i}`)) return false
+      }
+      return entryCount > 0
+    },
+    [data],
+  )
+
+  const toggleSection = useCallback(
+    (slug: string, sectionIndex: number, entryCount: number) => {
+      const current = { ...getSnapshot() }
+      const list = current[slug] ?? []
+      const allHidden = Array.from({ length: entryCount }, (_, i) => `${sectionIndex}-${i}`).every(
+        (id) => list.includes(id),
+      )
+      if (allHidden) {
+        // Show all entries in section
+        const sectionIds = new Set(
+          Array.from({ length: entryCount }, (_, i) => `${sectionIndex}-${i}`),
+        )
+        current[slug] = list.filter((id) => !sectionIds.has(id))
+      } else {
+        // Hide all entries in section
+        const sectionIds = Array.from({ length: entryCount }, (_, i) => `${sectionIndex}-${i}`)
+        current[slug] = [...new Set([...list, ...sectionIds])]
+      }
+      writeStorage(current)
+    },
+    [],
+  )
+
   const resetSlug = useCallback((slug: string) => {
     const current = { ...getSnapshot() }
     delete current[slug]
@@ -81,8 +117,8 @@ export function HiddenEntriesProvider({ children }: { children: React.ReactNode 
   )
 
   const value = useMemo(
-    () => ({ isHidden, toggle, resetSlug, hiddenCount }),
-    [isHidden, toggle, resetSlug, hiddenCount],
+    () => ({ isHidden, toggle, toggleSection, isSectionAllHidden, resetSlug, hiddenCount }),
+    [isHidden, toggle, toggleSection, isSectionAllHidden, resetSlug, hiddenCount],
   )
 
   return (
