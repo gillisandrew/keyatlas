@@ -38,7 +38,7 @@
       )
     },
   )
-  set text(font: "Inter", size: base-size)
+  set text(font: "Inter Variable", size: base-size)
   set par(leading: 0.5em)
 
   // Title block
