@@ -4,17 +4,29 @@ const STORAGE_KEY = 'keyatlas:hidden'
 
 type HiddenMap = Record<string, string[]>
 
-function readStorage(): HiddenMap {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY)
-    return raw ? JSON.parse(raw) : {}
-  } catch {
-    return {}
+let cachedRaw: string | null = null
+let cachedData: HiddenMap = {}
+
+function getSnapshot(): HiddenMap {
+  const raw = localStorage.getItem(STORAGE_KEY)
+  if (raw !== cachedRaw) {
+    cachedRaw = raw
+    try {
+      cachedData = raw ? JSON.parse(raw) : {}
+    } catch {
+      cachedData = {}
+    }
   }
+  return cachedData
 }
 
+const serverSnapshot: HiddenMap = {}
+
 function writeStorage(data: HiddenMap) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(data))
+  const json = JSON.stringify(data)
+  cachedRaw = json
+  cachedData = data
+  localStorage.setItem(STORAGE_KEY, json)
   window.dispatchEvent(new Event('keyatlas-hidden-change'))
 }
 
@@ -37,8 +49,8 @@ export function HiddenEntriesProvider({ children }: { children: React.ReactNode 
         window.removeEventListener('storage', cb)
       }
     },
-    readStorage,
-    () => ({}) as HiddenMap,
+    getSnapshot,
+    () => serverSnapshot,
   )
 
   const isHidden = useCallback(
@@ -47,7 +59,7 @@ export function HiddenEntriesProvider({ children }: { children: React.ReactNode 
   )
 
   const toggle = useCallback((slug: string, entryId: string) => {
-    const current = readStorage()
+    const current = { ...getSnapshot() }
     const list = current[slug] ?? []
     if (list.includes(entryId)) {
       current[slug] = list.filter((id) => id !== entryId)
@@ -58,7 +70,7 @@ export function HiddenEntriesProvider({ children }: { children: React.ReactNode 
   }, [])
 
   const resetSlug = useCallback((slug: string) => {
-    const current = readStorage()
+    const current = { ...getSnapshot() }
     delete current[slug]
     writeStorage(current)
   }, [])
