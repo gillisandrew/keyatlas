@@ -1,4 +1,5 @@
 import { HeadContent, Outlet, Scripts, createRootRoute } from '@tanstack/react-router'
+import { HiddenEntriesProvider } from '@/context/HiddenEntriesContext'
 
 import appCss from '../styles.css?url'
 
@@ -21,7 +22,9 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <HeadContent />
       </head>
       <body className="bg-gray-50 text-gray-900 antialiased">
-        {children}
+        <HiddenEntriesProvider>
+          {children}
+        </HiddenEntriesProvider>
         <Scripts />
       </body>
     </html>

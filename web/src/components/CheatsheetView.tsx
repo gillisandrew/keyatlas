@@ -1,7 +1,15 @@
 import type { Cheatsheet } from '@/data/types'
 import { EntryRow } from './EntryRow'
 
-export function CheatsheetView({ cheatsheet }: { cheatsheet: Cheatsheet }) {
+export function CheatsheetView({
+  cheatsheet,
+  slug,
+  collapsed,
+}: {
+  cheatsheet: Cheatsheet
+  slug: string
+  collapsed: boolean
+}) {
   const color = cheatsheet.color ?? '#4a90d9'
   const columns = cheatsheet.columns ?? 3
 
@@ -24,7 +32,13 @@ export function CheatsheetView({ cheatsheet }: { cheatsheet: Cheatsheet }) {
             </h3>
             <div className="divide-y divide-gray-100">
               {section.entries.map((entry, ei) => (
-                <EntryRow key={ei} entry={entry} entryId={`${si}-${ei}`} />
+                <EntryRow
+                  key={ei}
+                  entry={entry}
+                  entryId={`${si}-${ei}`}
+                  slug={slug}
+                  collapsed={collapsed}
+                />
               ))}
             </div>
           </div>
