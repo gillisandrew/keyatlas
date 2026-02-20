@@ -8,12 +8,18 @@ import { nitro } from 'nitro/vite'
 import yaml from '@modyfi/vite-plugin-yaml'
 
 const config = defineConfig({
+  base: '/keyatlas',
   plugins: [
     devtools(),
-    nitro({ rollupConfig: { external: [/^@sentry\//] } }),
+    nitro(),
     tsconfigPaths({ projects: ['./tsconfig.json'] }),
     tailwindcss(),
-    tanstackStart(),
+    tanstackStart({
+      prerender: {
+        enabled: true,
+        crawlLinks: true,
+      },
+    }),
     viteReact(),
     yaml(),
   ],
