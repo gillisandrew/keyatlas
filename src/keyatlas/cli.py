@@ -12,6 +12,7 @@ import typst
 import yaml
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
+FONT_DIR = PROJECT_ROOT / "fonts"
 
 # ── Mac-to-Windows key mapping ──────────────────────────────────────────
 
@@ -182,7 +183,12 @@ def compile_one(
     }
 
     try:
-        typst.compile(files, output=str(output_path))
+        typst.compile(
+            files,
+            output=str(output_path),
+            font_paths=[str(FONT_DIR)],
+            ignore_system_fonts=True,
+        )
         print(f"Compiled {output_path}")
         return True
     except Exception as exc:
