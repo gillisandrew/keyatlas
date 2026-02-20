@@ -1,0 +1,116 @@
+# yaml-language-server: $schema=../schema/keyatlas.schema.json
+app: macOS
+subtitle: Window management & navigation (Sequoia)
+columns: 3
+sections:
+  - name: Window Tiling
+    entries:
+      - keys: ["Fn", "⌃", "F"]
+        action: Fill screen
+      - keys: ["Fn", "⌃", "C"]
+        action: Center window
+      - keys: ["Fn", "⌃", "←"]
+        action: Tile left half
+      - keys: ["Fn", "⌃", "→"]
+        action: Tile right half
+      - keys: ["Fn", "⌃", "↑"]
+        action: Tile top half
+      - keys: ["Fn", "⌃", "↓"]
+        action: Tile bottom half
+      - keys: ["Fn", "⌃", "R"]
+        action: Return to previous size
+
+  - name: Tiling Arrangements
+    entries:
+      - keys: ["Fn", "⌃", "⇧", "←"]
+        action: "Left & right halves"
+      - keys: ["Fn", "⌃", "⇧", "→"]
+        action: "Right & left halves"
+      - keys: ["Fn", "⌃", "⇧", "↑"]
+        action: "Top & bottom halves"
+      - keys: ["Fn", "⌃", "⇧", "↓"]
+        action: "Bottom & top halves"
+      - keys: ["Fn", "⌃", "⌥", "⇧", "←"]
+        action: "Left half & right quarters"
+      - keys: ["Fn", "⌃", "⌥", "⇧", "→"]
+        action: "Right half & left quarters"
+      - keys: ["Fn", "⌃", "⌥", "⇧", "↑"]
+        action: "Top half & bottom quarters"
+      - keys: ["Fn", "⌃", "⌥", "⇧", "↓"]
+        action: "Bottom half & top quarters"
+
+  - name: Window Controls
+    entries:
+      - keys: ["⌘", "M"]
+        action: Minimize window
+      - keys: ["⌘", "⌥", "M"]
+        action: Minimize all windows
+      - keys: ["⌘", "H"]
+        action: Hide current app
+      - keys: ["⌘", "⌥", "H"]
+        action: Hide all other apps
+      - keys: ["⌘", "W"]
+        action: Close window
+      - keys: ["⌘", "⌥", "W"]
+        action: Close all windows
+      - keys: ["⌘", "⌃", "F"]
+        action: Toggle fullscreen
+      - keys: ["⌘", "Q"]
+        action: Quit application
+
+  - name: Mission Control
+    entries:
+      - keys: ["⌃", "↑"]
+        alt_keys: ["F3"]
+        action: Open Mission Control
+      - keys: ["⌃", "↓"]
+        action: Show windows of front app
+      - keys: ["⌘", "F3"]
+        alt_keys: ["Fn", "F11"]
+        action: Show desktop
+      - keys: ["⌥", "F3"]
+        action: Open Mission Control settings
+
+  - name: Spaces & Desktops
+    entries:
+      - keys: ["⌃", "←"]
+        action: Move left a space
+      - keys: ["⌃", "→"]
+        action: Move right a space
+      - keys: ["⌃", "1"]
+        action: "Switch to Desktop 1\u20139"
+        range: ["9"]
+
+  - name: App Switching
+    entries:
+      - keys: ["⌘", "Tab"]
+        action: Switch to next app
+      - keys: ["⌘", "⇧", "Tab"]
+        action: Switch to previous app
+      - keys: ["⌘", "`"]
+        action: Switch windows of current app
+      - keys: ["⌘", "⇧", "`"]
+        action: Switch windows in reverse
+
+  - name: Finder Navigation
+    entries:
+      - keys: ["⌘", "↑"]
+        action: Go to parent folder
+      - keys: ["⌘", "↓"]
+        action: Open selected item
+      - keys: ["⌘", "["]
+        action: Go back
+      - keys: ["⌘", "]"]
+        action: Go forward
+      - keys: ["⌘", "⇧", "C"]
+        action: Open Computer
+      - keys: ["⌘", "⇧", "D"]
+        action: Open Desktop
+      - keys: ["⌘", "⇧", "H"]
+        action: Open Home folder
+      - keys: ["⌘", "⇧", "A"]
+        action: Open Applications
+      - keys: ["⌘", "⇧", "U"]
+        action: Open Utilities
+      - keys: ["⌘", "⇧", "G"]
+        action: Go to folder

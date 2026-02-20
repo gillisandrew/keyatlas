@@ -1,0 +1,139 @@
+# yaml-language-server: $schema=../schema/keyatlas.schema.json
+app: macOS
+subtitle: Essential shortcuts for everyday use
+columns: 3
+sections:
+  - name: Cut, Copy & Paste
+    entries:
+      - keys: ["⌘", "X"]
+        action: Cut
+      - keys: ["⌘", "C"]
+        action: Copy
+      - keys: ["⌘", "V"]
+        action: Paste
+      - keys: ["⌥", "⌘", "V"]
+        action: Move (paste & delete original)
+      - keys: ["⌥", "⇧", "⌘", "V"]
+        action: Paste and Match Style
+      - keys: ["⌘", "Z"]
+        action: Undo
+      - keys: ["⇧", "⌘", "Z"]
+        action: Redo
+
+  - name: Common Actions
+    entries:
+      - keys: ["⌘", "A"]
+        action: Select All
+      - keys: ["⌘", "F"]
+        action: Find
+      - keys: ["⌘", "G"]
+        action: Find next occurrence
+      - keys: ["⇧", "⌘", "G"]
+        action: Find previous occurrence
+      - keys: ["⌘", "O"]
+        action: Open
+      - keys: ["⌘", "S"]
+        action: Save
+      - keys: ["⇧", "⌘", "S"]
+        action: Save As / Duplicate
+      - keys: ["⌘", "P"]
+        action: Print
+      - keys: ["⌘", "N"]
+        action: New window
+      - keys: ["⌘", "T"]
+        action: New tab
+
+  - name: Finder File Management
+    entries:
+      - keys: ["⌘", "D"]
+        action: Duplicate selected files
+      - keys: ["⌘", "I"]
+        action: Get Info
+      - keys: ["⌘", "E"]
+        action: Eject disk / volume
+      - keys: ["⌘", "K"]
+        action: Connect to Server
+      - keys: ["⌘", "Delete"]
+        action: Move to Trash
+      - keys: ["⇧", "⌘", "Delete"]
+        action: Empty Trash
+      - keys: ["⌥", "⇧", "⌘", "Delete"]
+        action: Empty Trash (no confirmation)
+      - keys: ["⇧", "⌘", "N"]
+        action: New folder
+      - keys: ["⌃", "⌘", "A"]
+        action: Make alias of selected item
+      - keys: ["⌘", "Y"]
+        action: Quick Look
+        alt_keys: ["Space"]
+
+  - name: Finder Views
+    entries:
+      - keys: ["⌘", "1"]
+        action: Icon view
+      - keys: ["⌘", "2"]
+        action: List view
+      - keys: ["⌘", "3"]
+        action: Column view
+      - keys: ["⌘", "4"]
+        action: Gallery view
+      - keys: ["⌘", "J"]
+        action: Show View Options
+      - keys: ["⌥", "⌘", "P"]
+        action: Toggle path bar
+      - keys: ["⌥", "⌘", "S"]
+        action: Toggle sidebar
+      - keys: ["⌘", "/"]
+        action: Toggle status bar
+      - keys: ["⇧", "⌘", "P"]
+        action: Toggle Preview pane
+      - keys: ["⇧", "⌘", "T"]
+        action: Toggle tab bar
+
+  - name: Finder Navigation
+    entries:
+      - keys: ["⌘", "↑"]
+        action: Go to parent folder
+      - keys: ["⌘", "↓"]
+        action: Open selected item
+      - keys: ["⌘", "["]
+        action: Go back
+      - keys: ["⌘", "]"]
+        action: Go forward
+      - keys: ["⇧", "⌘", "A"]
+        action: Applications
+      - keys: ["⇧", "⌘", "D"]
+        action: Desktop
+      - keys: ["⇧", "⌘", "H"]
+        action: Home folder
+      - keys: ["⇧", "⌘", "C"]
+        action: Computer
+      - keys: ["⇧", "⌘", "U"]
+        action: Utilities
+      - keys: ["⇧", "⌘", "I"]
+        action: iCloud Drive
+      - keys: ["⌥", "⌘", "L"]
+        action: Downloads
+      - keys: ["⇧", "⌘", "O"]
+        action: Documents
+      - keys: ["⇧", "⌘", "R"]
+        action: AirDrop
+      - keys: ["⇧", "⌘", "F"]
+        action: Recents
+      - keys: ["⇧", "⌘", "G"]
+        action: Go to Folder
+
+  - name: Sleep, Logout & Power
+    entries:
+      - keys: ["⌃", "⌘", "Q"]
+        action: Lock screen
+      - keys: ["⇧", "⌘", "Q"]
+        action: Log out (with confirmation)
+      - keys: ["⌥", "⇧", "⌘", "Q"]
+        action: Log out immediately
+      - keys: ["⌥", "⌘", "⏏"]
+        action: Put Mac to sleep
+      - keys: ["⌃", "⇧", "⏏"]
+        action: Put displays to sleep
+      - keys: ["⌃", "⏏"]
+        action: Restart / Sleep / Shut Down dialog

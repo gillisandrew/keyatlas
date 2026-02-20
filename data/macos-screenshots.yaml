@@ -1,0 +1,67 @@
+# yaml-language-server: $schema=../schema/keyatlas.schema.json
+app: macOS
+subtitle: Screenshots, screen recording & display
+columns: 3
+sections:
+  - name: Screenshots
+    entries:
+      - keys: ["⌘", "⇧", "3"]
+        action: Capture entire screen
+      - keys: ["⌘", "⇧", "4"]
+        action: Capture selected area
+      - keys: ["⌘", "⇧", "4", "Space"]
+        action: Capture a window
+      - keys: ["⌘", "⇧", "5"]
+        action: Screenshot & recording toolbar
+      - keys: ["⌘", "⇧", "6"]
+        action: Capture Touch Bar
+
+  - name: Screenshot Modifiers
+    entries:
+      - keys: ["⌃"]
+        action: "Copy to clipboard (hold with ⌘⇧3/4)"
+      - keys: ["⌥"]
+        action: "Remove shadow (hold during window capture)"
+      - keys: ["Space"]
+        action: "Move selection (hold during area select)"
+
+  - name: Display Controls
+    entries:
+      - keys: ["⌘", "F1"]
+        action: Toggle display mirroring
+      - keys: ["⌥", "F2"]
+        action: Open Displays settings
+      - keys: ["⌃", "F2"]
+        action: Adjust external display brightness
+      - keys: ["⌥", "⇧", "F2"]
+        action: Adjust brightness in smaller steps
+
+  - name: Quick Note & Utilities
+    entries:
+      - keys: ["Fn", "Q"]
+        action: Create a Quick Note
+      - keys: ["Fn", "E"]
+        action: Open Character Viewer
+      - keys: ["Fn", "D"]
+        action: Start / stop dictation
+      - keys: ["Fn", "C"]
+        action: Show / hide Control Center
+      - keys: ["Fn", "N"]
+        action: Show / hide Notification Center
+      - keys: ["Fn", "A"]
+        action: Show / hide Dock
+
+  - name: System Controls
+    entries:
+      - keys: ["⌃", "⌘", "Q"]
+        action: Lock screen
+      - keys: ["⌥", "⌘", "⎋"]
+        action: Force Quit dialog
+      - keys: ["⌘", "Space"]
+        action: Spotlight search
+      - keys: ["⌃", "⌘", "Space"]
+        action: Emoji & symbol picker
+      - keys: ["⌥", "⌘", "Space"]
+        action: Spotlight search from Finder
+      - keys: ["⌘", ","]
+        action: Open app settings

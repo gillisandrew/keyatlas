@@ -1,0 +1,122 @@
+# yaml-language-server: $schema=../schema/keyatlas.schema.json
+app: macOS
+subtitle: Text editing, cursor movement & selection
+columns: 3
+sections:
+  - name: Cursor Movement
+    entries:
+      - keys: ["⌘", "←"]
+        action: Beginning of line
+      - keys: ["⌘", "→"]
+        action: End of line
+      - keys: ["⌘", "↑"]
+        action: Beginning of document
+      - keys: ["⌘", "↓"]
+        action: End of document
+      - keys: ["⌥", "←"]
+        action: Beginning of previous word
+      - keys: ["⌥", "→"]
+        action: End of next word
+      - keys: ["Fn", "←"]
+        action: "Home (scroll to beginning)"
+      - keys: ["Fn", "→"]
+        action: "End (scroll to end)"
+      - keys: ["Fn", "↑"]
+        action: Page Up
+      - keys: ["Fn", "↓"]
+        action: Page Down
+
+  - name: Emacs-style Movement
+    entries:
+      - keys: ["⌃", "A"]
+        action: Beginning of line / paragraph
+      - keys: ["⌃", "E"]
+        action: End of line / paragraph
+      - keys: ["⌃", "F"]
+        action: Move one character forward
+      - keys: ["⌃", "B"]
+        action: Move one character backward
+      - keys: ["⌃", "P"]
+        action: Move up one line
+      - keys: ["⌃", "N"]
+        action: Move down one line
+      - keys: ["⌃", "L"]
+        action: Center cursor in visible area
+
+  - name: Selection
+    entries:
+      - keys: ["⇧", "⌘", "←"]
+        action: Select to beginning of line
+      - keys: ["⇧", "⌘", "→"]
+        action: Select to end of line
+      - keys: ["⇧", "⌘", "↑"]
+        action: Select to beginning of document
+      - keys: ["⇧", "⌘", "↓"]
+        action: Select to end of document
+      - keys: ["⌥", "⇧", "←"]
+        action: Extend selection by word (left)
+      - keys: ["⌥", "⇧", "→"]
+        action: Extend selection by word (right)
+      - keys: ["⌥", "⇧", "↑"]
+        action: Extend selection by paragraph (up)
+      - keys: ["⌥", "⇧", "↓"]
+        action: Extend selection by paragraph (down)
+      - keys: ["⇧", "←"]
+        action: Extend selection one character left
+      - keys: ["⇧", "→"]
+        action: Extend selection one character right
+
+  - name: Editing & Deletion
+    entries:
+      - keys: ["⌥", "Delete"]
+        action: Delete word to the left
+      - keys: ["Fn", "Delete"]
+        action: Forward delete
+      - keys: ["⌃", "H"]
+        action: Delete character to the left
+      - keys: ["⌃", "D"]
+        action: Delete character to the right
+      - keys: ["⌃", "K"]
+        action: Kill to end of line
+      - keys: ["⌃", "Y"]
+        action: Yank (paste killed text)
+      - keys: ["⌃", "O"]
+        action: Insert new line after cursor
+      - keys: ["⌃", "T"]
+        action: Swap characters around cursor
+
+  - name: Formatting
+    entries:
+      - keys: ["⌘", "B"]
+        action: Bold
+      - keys: ["⌘", "I"]
+        action: Italic
+      - keys: ["⌘", "U"]
+        action: Underline
+      - keys: ["⌘", "K"]
+        action: Add web link
+      - keys: ["⌘", "{"]
+        action: Left align
+      - keys: ["⌘", "}"]
+        action: Right align
+      - keys: ["⇧", "⌘", "|"]
+        action: Center align
+      - keys: ["⌘", "T"]
+        action: Show / hide Fonts window
+      - keys: ["⌥", "⌘", "C"]
+        action: Copy Style
+      - keys: ["⌥", "⌘", "V"]
+        action: Paste Style
+
+  - name: Spelling & Help
+    entries:
+      - keys: ["⇧", "⌘", ":"]
+        action: Spelling & Grammar window
+      - keys: ["⌘", ";"]
+        action: Find misspelled words
+      - keys: ["⌃", "⌘", "D"]
+        action: Look up selected word
+      - keys: ["⇧", "⌘", "?"]
+        action: Open Help menu
+      - keys: ["⌥", "⌘", "F"]
+        action: Go to search field
