@@ -1,4 +1,4 @@
-import { Code, Columns3, Minus, Plus, Printer } from 'lucide-react'
+import { Code, Columns3, Minus, Plus, Printer, Search } from 'lucide-react'
 import { useHiddenEntries } from '@/context/HiddenEntriesContext'
 import type { FontSize } from '@/routes/$appSlug'
 
@@ -21,6 +21,8 @@ export function Toolbar({
   hasLayoutOverrides,
   onResetLayout,
   onViewYaml,
+  searchQuery = '',
+  onSearchChange,
 }: {
   slug: string
   collapsed: boolean
@@ -32,6 +34,8 @@ export function Toolbar({
   hasLayoutOverrides: boolean
   onResetLayout: () => void
   onViewYaml: () => void
+  searchQuery?: string
+  onSearchChange?: (query: string) => void
 }) {
   const { resetSlug, hiddenCount } = useHiddenEntries()
   const count = hiddenCount(slug)
@@ -56,6 +60,18 @@ export function Toolbar({
       )}
 
       <div className="ml-auto flex items-center gap-2">
+        {onSearchChange && (
+          <div className="relative">
+            <Search size={14} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400" />
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => onSearchChange(e.target.value)}
+              placeholder="Search..."
+              className="w-44 rounded border border-gray-200 py-1 pl-8 pr-3 text-xs text-gray-700 placeholder-gray-400 focus:border-gray-300 focus:outline-none"
+            />
+          </div>
+        )}
         <div className="flex items-center gap-1 rounded border border-gray-200 px-1 py-0.5">
           <Columns3 size={14} className="text-gray-400" />
           <button

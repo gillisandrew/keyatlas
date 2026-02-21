@@ -164,6 +164,8 @@ function CheatsheetPage() {
           hasLayoutOverrides={hasLayoutOverrides}
           onResetLayout={handleResetLayout}
           onViewYaml={() => setShowYaml(true)}
+          searchQuery={searchQuery}
+          onSearchChange={setSearchQuery}
         />
         <CheatsheetView
           cheatsheet={cheatsheet}
@@ -174,7 +176,6 @@ function CheatsheetPage() {
           layoutOverrides={layoutOverrides}
           onLayoutChange={handleLayoutChange}
           searchQuery={searchQuery}
-          onSearchChange={setSearchQuery}
           headingOverrides={headingOverrides}
           onHeadingChange={handleHeadingChange}
         />

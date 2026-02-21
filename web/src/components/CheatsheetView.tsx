@@ -10,16 +10,16 @@ import {
   type DragEndEvent,
   type DragStartEvent,
 } from '@dnd-kit/core'
-import { Eye, EyeOff, GripVertical, Search } from 'lucide-react'
+import { Eye, EyeOff, GripVertical, Pencil } from 'lucide-react'
 import type { Cheatsheet, Section } from '@/data/types'
 import type { FontSize, HeadingOverrides, LayoutOverrides } from '@/routes/$appSlug'
 import { EntryRow } from './EntryRow'
 import { useHiddenEntries } from '@/context/HiddenEntriesContext'
 
-const fontSizeEm: Record<FontSize, string> = {
-  sm: '0.85em',
-  md: '1em',
-  lg: '1.15em',
+const fontSizeRem: Record<FontSize, string> = {
+  sm: '0.8rem',
+  md: '0.875rem',
+  lg: '1rem',
 }
 
 interface VisibleSection {
@@ -209,7 +209,7 @@ function SectionContent({
   return (
     <>
       <h3
-        className="mb-2 flex items-center justify-between border-b-2 pb-1 text-sm font-semibold uppercase tracking-wide"
+        className="mb-2 flex items-center justify-between border-b-2 pb-1 font-semibold uppercase tracking-wide"
         style={{ borderColor: color, color }}
       >
         {editing ? (
@@ -222,16 +222,21 @@ function SectionContent({
               if (e.key === 'Enter') commitEdit()
               if (e.key === 'Escape') setEditing(false)
             }}
-            className="w-full border-none bg-transparent p-0 text-sm font-semibold uppercase tracking-wide outline-none"
+            className="w-full border-none bg-transparent p-0 font-semibold uppercase tracking-wide outline-none"
             style={{ color }}
           />
         ) : (
-          <span
-            onDoubleClick={onHeadingChange ? startEditing : undefined}
-            className={onHeadingChange ? 'cursor-text' : ''}
-            title={onHeadingChange ? 'Double-click to edit' : undefined}
-          >
+          <span className="flex items-center gap-1.5">
             {displayName}
+            {onHeadingChange && (
+              <button
+                onClick={startEditing}
+                className="toggle-btn opacity-0 transition-opacity group-hover:opacity-60 hover:!opacity-100"
+                title="Edit heading"
+              >
+                <Pencil size={12} />
+              </button>
+            )}
           </span>
         )}
         <button
@@ -267,7 +272,6 @@ export function CheatsheetView({
   layoutOverrides = {},
   onLayoutChange,
   searchQuery = '',
-  onSearchChange,
   headingOverrides = {},
   onHeadingChange,
 }: {
@@ -279,7 +283,6 @@ export function CheatsheetView({
   layoutOverrides?: LayoutOverrides
   onLayoutChange?: (overrides: LayoutOverrides) => void
   searchQuery?: string
-  onSearchChange?: (query: string) => void
   headingOverrides?: HeadingOverrides
   onHeadingChange?: (sectionIndex: number, name: string) => void
 }) {
@@ -368,22 +371,10 @@ export function CheatsheetView({
 
   return (
     <div>
-      <div className="mb-6">
+      <div className="mb-4">
         <h1 className="text-2xl font-bold">{cheatsheet.app}</h1>
         {cheatsheet.subtitle && (
-          <p className="mt-1 text-sm text-gray-500">{cheatsheet.subtitle}</p>
-        )}
-        {onSearchChange && (
-          <div className="relative mt-3">
-            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => onSearchChange(e.target.value)}
-              placeholder="Search actions..."
-              className="w-full max-w-xs rounded border border-gray-200 py-1.5 pl-8 pr-3 text-sm text-gray-700 placeholder-gray-400 focus:border-gray-300 focus:outline-none"
-            />
-          </div>
+          <p className="mt-0.5 text-sm text-gray-500">{cheatsheet.subtitle}</p>
         )}
       </div>
       <DndContext
@@ -394,7 +385,7 @@ export function CheatsheetView({
       >
         <div
           className="cheatsheet-columns grid gap-6"
-          style={{ gridTemplateColumns: `repeat(${columnCount}, minmax(0, 1fr))`, fontSize: fontSizeEm[fontSize] }}
+          style={{ gridTemplateColumns: `repeat(${columnCount}, minmax(0, 1fr))`, fontSize: fontSizeRem[fontSize] }}
         >
           {columns.map((colSections, ci) => (
             <DroppableColumn key={ci} id={`column-${ci}`}>
