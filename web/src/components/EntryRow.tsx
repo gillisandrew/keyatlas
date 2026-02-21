@@ -47,7 +47,7 @@ export function EntryRow({
       <span className="shrink-0">
         <KeyCombo keys={entry.keys} range={entry.range} altKeys={entry.alt_keys} />
       </span>
-      <span className="flex items-center gap-2 text-sm text-gray-600 text-right">
+      <span className="flex items-center gap-2 text-gray-600 text-right">
         <span className="text-right"><HighlightedText text={entry.action} query={searchQuery ?? ''} /></span>
         <button
           onClick={() => toggle(slug, entryId)}
