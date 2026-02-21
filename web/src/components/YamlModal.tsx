@@ -52,6 +52,83 @@ function generateYaml(cheatsheet: Cheatsheet, isHidden: (slug: string, id: strin
   return lines.join('\n')
 }
 
+function colorizeYaml(yaml: string): React.ReactNode[] {
+  return yaml.split('\n').map((line, i) => {
+    const parts: React.ReactNode[] = []
+
+    // Comment lines
+    if (line.trimStart().startsWith('#')) {
+      parts.push(<span key={i} className="text-gray-400">{line}</span>)
+      return <div key={i}>{parts}{'\n'}</div>
+    }
+
+    // Match leading whitespace + key: value
+    const keyMatch = line.match(/^(\s*-?\s*)(\w[\w_]*)(:)(.*)$/)
+    if (keyMatch) {
+      const [, indent, key, colon, rest] = keyMatch
+      parts.push(indent)
+      parts.push(<span key="k" className="text-blue-600">{key}</span>)
+      parts.push(<span key="c" className="text-gray-500">{colon}</span>)
+
+      // Colorize the value part
+      const trimmedRest = rest
+      if (trimmedRest) {
+        parts.push(colorizeValue(trimmedRest, `v-${i}`))
+      }
+    } else if (line.trimStart().startsWith('-')) {
+      // Array item without a key
+      const dashMatch = line.match(/^(\s*)(-)(.*)$/)
+      if (dashMatch) {
+        const [, indent, dash, rest] = dashMatch
+        parts.push(indent)
+        parts.push(<span key="d" className="text-gray-500">{dash}</span>)
+        if (rest) parts.push(colorizeValue(rest, `a-${i}`))
+      } else {
+        parts.push(line)
+      }
+    } else {
+      parts.push(line)
+    }
+
+    return <div key={i}>{parts}{'\n'}</div>
+  })
+}
+
+function colorizeValue(value: string, keyPrefix: string): React.ReactNode {
+  const parts: React.ReactNode[] = []
+  let remaining = value
+  let idx = 0
+
+  while (remaining.length > 0) {
+    // Quoted string
+    const strMatch = remaining.match(/^([^"]*)"([^"]*)"/)
+    if (strMatch) {
+      if (strMatch[1]) parts.push(colorizeTokens(strMatch[1], `${keyPrefix}-${idx++}`))
+      parts.push(<span key={`${keyPrefix}-s-${idx++}`} className="text-green-600">"{strMatch[2]}"</span>)
+      remaining = remaining.slice(strMatch[0].length)
+      continue
+    }
+    // No more strings — colorize rest as tokens
+    parts.push(colorizeTokens(remaining, `${keyPrefix}-${idx++}`))
+    break
+  }
+
+  return <>{parts}</>
+}
+
+function colorizeTokens(text: string, key: string): React.ReactNode {
+  // Colorize numbers and brackets
+  return text.split(/(\d+|[\[\],])/).map((part, i) => {
+    if (/^\d+$/.test(part)) {
+      return <span key={`${key}-${i}`} className="text-orange-500">{part}</span>
+    }
+    if (/^[\[\],]$/.test(part)) {
+      return <span key={`${key}-${i}`} className="text-gray-500">{part}</span>
+    }
+    return part
+  })
+}
+
 export function YamlModal({
   cheatsheet,
   onClose,
@@ -95,7 +172,7 @@ export function YamlModal({
           </div>
         </div>
         <pre className="overflow-auto p-4 font-mono text-xs leading-relaxed text-gray-800">
-          {yaml}
+          {colorizeYaml(yaml)}
         </pre>
       </div>
     </div>
