@@ -11,6 +11,9 @@ export type FontSize = 'sm' | 'md' | 'lg'
 /** sectionIndex -> columnIndex */
 export type LayoutOverrides = Record<number, number>
 
+/** sectionIndex -> custom heading name */
+export type HeadingOverrides = Record<number, string>
+
 export const Route = createFileRoute('/$appSlug')({
   component: CheatsheetPage,
   loader: ({ params }) => {
@@ -23,6 +26,8 @@ export const Route = createFileRoute('/$appSlug')({
 const LAYOUT_KEY = 'keyatlas:layout'
 const FONT_KEY = 'keyatlas:font-scale'
 const COLUMNS_KEY = 'keyatlas:columns'
+const SIDEBAR_KEY = 'keyatlas:sidebar-open'
+const HEADINGS_KEY = 'keyatlas:headings'
 
 function getStoredMap<T>(key: string, slug: string): T | undefined {
   try {
@@ -68,9 +73,29 @@ function CheatsheetPage() {
   const [layoutOverrides, setLayoutOverrides] = useState<LayoutOverrides>(
     () => getStoredMap<LayoutOverrides>(LAYOUT_KEY, cheatsheet.slug) ?? {},
   )
+  const [headingOverrides, setHeadingOverrides] = useState<HeadingOverrides>(
+    () => getStoredMap<HeadingOverrides>(HEADINGS_KEY, cheatsheet.slug) ?? {},
+  )
   const [showYaml, setShowYaml] = useState(false)
+  const [searchQuery, setSearchQuery] = useState('')
+  const [sidebarOpen, setSidebarOpen] = useState(() => {
+    try {
+      const v = localStorage.getItem(SIDEBAR_KEY)
+      return v === null ? true : v === 'true'
+    } catch {
+      return true
+    }
+  })
 
   const hasLayoutOverrides = Object.keys(layoutOverrides).length > 0
+
+  function handleSidebarToggle() {
+    setSidebarOpen((prev) => {
+      const next = !prev
+      try { localStorage.setItem(SIDEBAR_KEY, String(next)) } catch {}
+      return next
+    })
+  }
 
   function handleFontSizeChange(size: FontSize) {
     setFontSize(size)
@@ -98,6 +123,27 @@ function CheatsheetPage() {
     [cheatsheet.slug],
   )
 
+  const handleHeadingChange = useCallback(
+    (sectionIndex: number, name: string) => {
+      setHeadingOverrides((prev) => {
+        const next = { ...prev }
+        // If name matches original, remove the override
+        if (name === cheatsheet.sections[sectionIndex]?.name) {
+          delete next[sectionIndex]
+        } else {
+          next[sectionIndex] = name
+        }
+        if (Object.keys(next).length > 0) {
+          storeMapValue(HEADINGS_KEY, cheatsheet.slug, next)
+        } else {
+          deleteMapValue(HEADINGS_KEY, cheatsheet.slug)
+        }
+        return next
+      })
+    },
+    [cheatsheet.slug, cheatsheet.sections],
+  )
+
   function handleResetLayout() {
     setLayoutOverrides({})
     deleteMapValue(LAYOUT_KEY, cheatsheet.slug)
@@ -105,7 +151,7 @@ function CheatsheetPage() {
 
   return (
     <div className="flex min-h-screen">
-      <AppSidebar />
+      <AppSidebar open={sidebarOpen} onToggle={handleSidebarToggle} />
       <main className="flex-1 overflow-auto p-8">
         <Toolbar
           slug={cheatsheet.slug}
@@ -127,6 +173,10 @@ function CheatsheetPage() {
           columnCount={columnCount}
           layoutOverrides={layoutOverrides}
           onLayoutChange={handleLayoutChange}
+          searchQuery={searchQuery}
+          onSearchChange={setSearchQuery}
+          headingOverrides={headingOverrides}
+          onHeadingChange={handleHeadingChange}
         />
       </main>
       {showYaml && (

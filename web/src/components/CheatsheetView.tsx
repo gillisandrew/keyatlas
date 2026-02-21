@@ -10,16 +10,16 @@ import {
   type DragEndEvent,
   type DragStartEvent,
 } from '@dnd-kit/core'
-import { Eye, EyeOff, GripVertical } from 'lucide-react'
+import { Eye, EyeOff, GripVertical, Search } from 'lucide-react'
 import type { Cheatsheet, Section } from '@/data/types'
-import type { FontSize, LayoutOverrides } from '@/routes/$appSlug'
+import type { FontSize, HeadingOverrides, LayoutOverrides } from '@/routes/$appSlug'
 import { EntryRow } from './EntryRow'
 import { useHiddenEntries } from '@/context/HiddenEntriesContext'
 
-const fontSizeClass: Record<FontSize, string> = {
-  sm: 'text-xs',
-  md: 'text-sm',
-  lg: 'text-base',
+const fontSizeEm: Record<FontSize, string> = {
+  sm: '0.85em',
+  md: '1em',
+  lg: '1.15em',
 }
 
 interface VisibleSection {
@@ -172,6 +172,9 @@ function SectionContent({
   slug,
   collapsed,
   color,
+  searchQuery,
+  displayName,
+  onHeadingChange,
   toggleSection,
   isSectionAllHidden,
 }: {
@@ -180,10 +183,28 @@ function SectionContent({
   slug: string
   collapsed: boolean
   color: string
+  searchQuery?: string
+  displayName: string
+  onHeadingChange?: (sectionIndex: number, name: string) => void
   toggleSection: (slug: string, si: number, count: number) => void
   isSectionAllHidden: (slug: string, si: number, count: number) => boolean
 }) {
   const allHidden = isSectionAllHidden(slug, si, section.entries.length)
+  const [editing, setEditing] = useState(false)
+  const [editValue, setEditValue] = useState(displayName)
+
+  function startEditing() {
+    setEditValue(displayName)
+    setEditing(true)
+  }
+
+  function commitEdit() {
+    setEditing(false)
+    const trimmed = editValue.trim()
+    if (trimmed && trimmed !== displayName) {
+      onHeadingChange?.(si, trimmed)
+    }
+  }
 
   return (
     <>
@@ -191,10 +212,31 @@ function SectionContent({
         className="mb-2 flex items-center justify-between border-b-2 pb-1 text-sm font-semibold uppercase tracking-wide"
         style={{ borderColor: color, color }}
       >
-        {section.name}
+        {editing ? (
+          <input
+            autoFocus
+            value={editValue}
+            onChange={(e) => setEditValue(e.target.value)}
+            onBlur={commitEdit}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') commitEdit()
+              if (e.key === 'Escape') setEditing(false)
+            }}
+            className="w-full border-none bg-transparent p-0 text-sm font-semibold uppercase tracking-wide outline-none"
+            style={{ color }}
+          />
+        ) : (
+          <span
+            onDoubleClick={onHeadingChange ? startEditing : undefined}
+            className={onHeadingChange ? 'cursor-text' : ''}
+            title={onHeadingChange ? 'Double-click to edit' : undefined}
+          >
+            {displayName}
+          </span>
+        )}
         <button
           onClick={() => toggleSection(slug, si, section.entries.length)}
-          className="toggle-btn ml-2 opacity-40 hover:opacity-100"
+          className="toggle-btn ml-2 shrink-0 opacity-40 hover:opacity-100"
           title={allHidden ? 'Show section' : 'Hide section'}
         >
           {allHidden ? <EyeOff size={14} /> : <Eye size={14} />}
@@ -208,6 +250,7 @@ function SectionContent({
             entryId={`${si}-${ei}`}
             slug={slug}
             collapsed={collapsed}
+            searchQuery={searchQuery}
           />
         ))}
       </div>
@@ -223,6 +266,10 @@ export function CheatsheetView({
   columnCount,
   layoutOverrides = {},
   onLayoutChange,
+  searchQuery = '',
+  onSearchChange,
+  headingOverrides = {},
+  onHeadingChange,
 }: {
   cheatsheet: Cheatsheet
   slug: string
@@ -231,6 +278,10 @@ export function CheatsheetView({
   columnCount: number
   layoutOverrides?: LayoutOverrides
   onLayoutChange?: (overrides: LayoutOverrides) => void
+  searchQuery?: string
+  onSearchChange?: (query: string) => void
+  headingOverrides?: HeadingOverrides
+  onHeadingChange?: (sectionIndex: number, name: string) => void
 }) {
   const color = cheatsheet.color ?? '#4a90d9'
   const { isSectionAllHidden, toggleSection } = useHiddenEntries()
@@ -322,6 +373,18 @@ export function CheatsheetView({
         {cheatsheet.subtitle && (
           <p className="mt-1 text-sm text-gray-500">{cheatsheet.subtitle}</p>
         )}
+        {onSearchChange && (
+          <div className="relative mt-3">
+            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => onSearchChange(e.target.value)}
+              placeholder="Search actions..."
+              className="w-full max-w-xs rounded border border-gray-200 py-1.5 pl-8 pr-3 text-sm text-gray-700 placeholder-gray-400 focus:border-gray-300 focus:outline-none"
+            />
+          </div>
+        )}
       </div>
       <DndContext
         sensors={sensors}
@@ -330,8 +393,8 @@ export function CheatsheetView({
         onDragCancel={handleDragCancel}
       >
         <div
-          className={`cheatsheet-columns grid gap-6 ${fontSizeClass[fontSize]}`}
-          style={{ gridTemplateColumns: `repeat(${columnCount}, minmax(0, 1fr))` }}
+          className="cheatsheet-columns grid gap-6"
+          style={{ gridTemplateColumns: `repeat(${columnCount}, minmax(0, 1fr))`, fontSize: fontSizeEm[fontSize] }}
         >
           {columns.map((colSections, ci) => (
             <DroppableColumn key={ci} id={`column-${ci}`}>
@@ -347,6 +410,9 @@ export function CheatsheetView({
                     slug={slug}
                     collapsed={collapsed}
                     color={color}
+                    searchQuery={searchQuery}
+                    displayName={headingOverrides[si] ?? section.name}
+                    onHeadingChange={onHeadingChange}
                     toggleSection={toggleSection}
                     isSectionAllHidden={isSectionAllHidden}
                   />
